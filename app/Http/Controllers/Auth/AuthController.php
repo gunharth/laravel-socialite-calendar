@@ -83,9 +83,16 @@ class AuthController extends Controller
             return view('pages.status')
                 ->with('error','No such provider');
 
-        return Socialite::driver( $provider )->redirect();
+        return Socialite::driver( $provider )
+            ->scopes([
+                'https://www.googleapis.com/auth/calendar',
+                'https://www.googleapis.com/auth/plus.me',
+                'https://www.googleapis.com/auth/plus.login',
+                'https://www.googleapis.com/auth/plus.profile.emails.read',
+                ])->redirect();
 
     }
+
 
     public function getSocialHandle( $provider )
     {
@@ -143,7 +150,35 @@ class AuthController extends Controller
         {
             return redirect()->route('admin.home');
         }*/
-        return 'take me to page';
-        return \App::abort(500);
+        /*$optParams = array(
+          'maxResults' => 999,
+          'orderBy' => 'startTime',
+          //'timeMin' => $timeMin,
+          //'timeMax' => $timeMax,
+          'singleEvents' => true
+        );
+        $allevents = $this->service->events->listEvents('p3ol3iomgjspr2nssld48jm9f8@group.calendar.google.com', $optParams);
+        $events = $allevents->items;
+        foreach ($events as $event) {
+            $items[] = array(
+                'id' => $event->id,
+                'title' => $event->summary,
+                'start' => $event->start->dateTime,
+                'end' => $event->end->dateTime,
+                'description' => $event->description
+            );
+        }
+        return $items;*/
+        //return $token = $user->token;
+        /*$client = new \Google_Client();
+
+        $client->setAccessToken($user->token);
+        $service = new \Google_Service_Calendar($client);*/
+        
+        session(['access_token' => $user->token]);
+//return $user->token;
+  //      return session('access_token');
+        return redirect()->action('CalendarController@index');
+        //return \App::abort(500);
     }
 }
