@@ -88,6 +88,16 @@
 
 <script>
 
+var Calendar = (function(){
+    var my = {};
+
+    my.Yo = function() {
+        alert('yo');
+    };
+    return my;
+}());
+Calendar.Yo();
+
     $(document).ready(function() {
 
             $('.i-checks').iCheck({
